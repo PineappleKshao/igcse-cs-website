@@ -1,0 +1,1 @@
+[{"q":"Which component does arithmetic/logical ops?","options":["RAM","ALU","ROM"],"answer":"ALU"},{"q":"Volatile memory means?","options":["Permanent","Lost when power off"],"answer":"Lost when power off"}]
