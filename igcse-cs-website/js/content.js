@@ -131,7 +131,7 @@ window.CHAPTERS = [
     quiz:[
       ["What does DNS do?",["Compresses images","Translates domain names to IP addresses","Creates passwords","Scans malware"],1],
       ["Which attack tricks users with fake messages?",["Phishing","Defragmentation","Checksum","Compilation"],0],
-      ["The WWW is best described as...",["A service on the internet","The same as RAM","A storage device","A CPU cycle"],0]
+      ["The WWW is best described as:",["A service on the internet","The same as RAM","A storage device","A CPU cycle"],0]
     ]
   },
   {
@@ -158,7 +158,7 @@ window.CHAPTERS = [
     quiz:[
       ["Which device produces physical action?",["Sensor","Actuator","Register","Router"],1],
       ["What is feedback used for?",["To ignore new data","To adjust output using readings","To delete files","To format text"],1],
-      ["AI systems usually need...",["Training data","Optical discs only","No algorithms","Only ROM"],0]
+      ["AI systems usually need:",["Training data","Optical discs only","No algorithms","Only ROM"],0]
     ]
   },
   {
@@ -183,9 +183,9 @@ window.CHAPTERS = [
       ["What makes a trace table good?","Clear columns for variables and output, updated in execution order."]
     ],
     quiz:[
-      ["Breaking a problem into smaller parts is called...",["Encryption","Decomposition","Compilation","Normalisation"],1],
+      ["Breaking a problem into smaller parts is called:",["Encryption","Decomposition","Compilation","Normalisation"],1],
       ["Which test data is outside the allowed range?",["Normal","Abnormal","Boundary","Valid"],1],
-      ["A trace table records...",["Packet routes","Variable values during a dry run","Image pixels only","Passwords"],1]
+      ["A trace table records:",["Packet routes","Variable values during a dry run","Image pixels only","Passwords"],1]
     ]
   },
   {
@@ -212,7 +212,7 @@ window.CHAPTERS = [
     quiz:[
       ["Which data type stores TRUE or FALSE?",["String","Real","Boolean","Char"],2],
       ["Which loop is best when repetitions are known?",["FOR","IF","CASE","INPUT"],0],
-      ["An array is used to...",["Store multiple related values","Translate code","Route packets","Detect viruses"],0]
+      ["An array is used to:",["Store multiple related values","Translate code","Route packets","Detect viruses"],0]
     ]
   },
   {
@@ -266,7 +266,7 @@ window.CHAPTERS = [
     quiz:[
       ["Which gate outputs 1 only when both inputs are 1?",["OR","AND","XOR","NOT"],1],
       ["How many rows does a truth table with 3 inputs need?",["3","6","8","9"],2],
-      ["XOR outputs 1 when...",["Both inputs are 0","Both inputs are 1","Exactly one input is 1","No input exists"],2]
+      ["XOR outputs 1 when:",["Both inputs are 0","Both inputs are 1","Exactly one input is 1","No input exists"],2]
     ]
   }
 ];

@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Classroom Hub</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header>
+    <div class="hero-inner">
+      <p class="kicker">Teacher mode</p>
+      <h1>Classroom Hub</h1>
+      <p>Compact exam-style worksheet and homework packs for every chapter, with answer patterns for teaching.</p>
+    </div>
+  </header>
+  <main class="container">
+    <div class="topbar">
+      <div>
+        <h2>Exam-Style Packs</h2>
+        <p>Original practice tasks aligned to textbook concepts, PPT teaching points and 2018-2022 past-paper style.</p>
+      </div>
+      <div class="toolbar">
+        <a class="btn secondary" href="index.html">Home</a>
+        <a class="btn secondary" href="dashboard.html">Dashboard</a>
+        <button class="btn" onclick="window.print()">Print Selected Pack</button>
+      </div>
+    </div>
+
+    <section class="classroom-planner">
+      <article class="teacher-card">
+        <span class="chip">Worksheet</span>
+        <h3>In-class practice</h3>
+        <p>Short scaffolded exam-style tasks for guided modelling, board discussion and quick checking.</p>
+      </article>
+      <article class="teacher-card">
+        <span class="chip">Homework</span>
+        <h3>Independent practice</h3>
+        <p>Slightly longer questions that require explanation, calculation or evaluation using mark-point answers.</p>
+      </article>
+      <article class="teacher-card">
+        <span class="chip">Answer pattern</span>
+        <h3>What to say for marks</h3>
+        <p>Frequent answer stems help students learn the phrasing Cambridge-style mark schemes reward.</p>
+      </article>
+      <article class="teacher-card">
+        <span class="chip">Classified</span>
+        <h3>Real paper practice</h3>
+        <p>Use chapter-classified paper files after students have practised the compact pack.</p>
+      </article>
+    </section>
+
+    <section class="panel">
+      <div class="resource-controls">
+        <label>Chapter
+          <select id="chapterFilter"></select>
+        </label>
+        <label>Pack
+          <select id="packFilter">
+            <option value="all">Worksheet + homework</option>
+            <option value="worksheet">Worksheet only</option>
+            <option value="homework">Homework only</option>
+          </select>
+        </label>
+        <label>Search
+          <input id="resourceSearch" type="search" placeholder="binary, CPU, SQL, trace table:">
+        </label>
+      </div>
+      <div id="packMount"></div>
+    </section>
+
+    <section class="panel">
+      <div class="topbar">
+        <div>
+          <h2>Classified Paper Practice</h2>
+          <p id="classifiedSummary">Chapter-classified paper files from your local ClassifiedPaper folder.</p>
+        </div>
+      </div>
+      <div class="resource-controls">
+        <label>Year
+          <select id="classifiedYearFilter"></select>
+        </label>
+        <label>Type
+          <select id="classifiedKindFilter">
+            <option value="all">Questions + answers</option>
+            <option value="question">Questions only</option>
+            <option value="answer">Answers only</option>
+          </select>
+        </label>
+        <label>Search
+          <input id="classifiedSearch" type="search" placeholder="2022, answer, Chpt3:">
+        </label>
+      </div>
+      <div id="classifiedMount" class="classified-list"></div>
+    </section>
+  </main>
+  <script src="js/content.js"></script>
+  <script src="js/practice-packs.js"></script>
+  <script src="js/classified-papers.js"></script>
+  <script src="js/classroom.js"></script>
+</body>
+</html>
