@@ -32,9 +32,11 @@ A static website for Cambridge IGCSE Computer Science students. The site is orga
 - Teacher Classroom Hub for original compact worksheet and homework packs.
 - Exam-style answer patterns for each chapter, based on textbook/PPT concepts and 2018-2022 past-paper style.
 - Lesson Mode on every chapter page for projector-friendly classroom teaching.
+- Apple-inspired visual system across the home page, dashboard, Classroom Hub, chapter pages and Lesson Mode.
+- Responsive page scaling for desktop, projector and mobile screens.
 - Worked examples and command-word answer templates on chapter pages.
 - Classified-paper practice section using local chapter/year classified files.
-- No build step required: plain HTML, CSS and JavaScript.
+- No login interface and no build step required: plain HTML, CSS and JavaScript.
 
 ## Project Structure
 
@@ -48,7 +50,7 @@ igcse-cs-website/
     :
     chapter10.html
   css/
-    style.css             # Site styling
+    style.css             # Shared Apple-inspired visual system and site styling
   js/
     content.js            # All chapter content and quiz data
     practice-packs.js     # Original worksheet/homework packs and answer points
@@ -135,14 +137,14 @@ The generated files are:
 igcse-cs-website/js/powerpoint-resources.js
 igcse-cs-website/js/lesson-slides.js
 igcse-cs-website/assets/lesson-thumbnails/
-igcse-cs-website/assets/lesson-backgrounds/cs-fallback.png
+igcse-cs-website/assets/lesson-backgrounds/cs-light-classroom.png
 ```
 
 The resource index reads chapter and topic numbers from folder names such as `Chapter 1 - Data representation` and `T1 Binary systems`. PowerPoint files open in PowerPoint or Keynote from the browser link. PDF files can be previewed inside the section when the browser allows local-file preview.
 
 The lesson-slide index extracts the visible text from each PPTX slide. It does not create new lesson content; it turns the existing PowerPoint slide titles and bullet text into a web-based lesson player.
 
-The same generator also creates one local thumbnail for each PPTX deck. Lesson Mode uses those thumbnails as deck selector images, right-side lesson pictures and blurred classroom backgrounds. A generated abstract computer-science background is stored as a fallback when a PPT thumbnail cannot be created.
+The same generator also creates one local thumbnail for each PPTX deck. Lesson Mode uses those thumbnails as deck selector images, while the web lesson player uses a light generated computer-science classroom background and topic-specific visual cards so it does not look like a plain PowerPoint screenshot.
 
 ## Classified Papers
 
@@ -175,6 +177,17 @@ It includes:
 - an `Open PPT` button for opening the original PowerPoint file
 
 Use the arrow buttons or keyboard arrow keys to move through the slides. Press `Escape` or `Close` to return to the chapter page. On short screens, the topic visual is hidden automatically so the `Next` button stays visible and clickable.
+
+## Visual Design
+
+The site now uses one consistent Apple-inspired interface across all main pages:
+
+- large light hero sections with computer-science imagery
+- clean San Francisco-style system fonts
+- soft grey page backgrounds, white panels and subtle shadows
+- blue primary actions and simple pill controls
+- responsive chapter pages that keep teaching controls reachable on smaller screens
+- lighter Lesson Mode visuals instead of a black presentation screen
 
 ## Editing Chapter Content
 
