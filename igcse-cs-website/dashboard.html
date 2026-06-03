@@ -1,1 +1,39 @@
-<!doctype html><html lang='en'><head><meta charset='UTF-8'/><meta name='viewport' content='width=device-width,initial-scale=1'/><title>Dashboard</title><link rel='stylesheet' href='css/style.css'/></head><body><header><h1>Student Dashboard</h1></header><main class='container'><div class='topbar'><div><h2 id='welcomeText'></h2><p id='studentInfo'></p></div><button class='btn secondary' id='logoutBtn'>Logout</button></div><div class='card'><h3>Your Progress</h3><p id='progressText'></p><div class='progress-wrap'><div id='progressBar' class='progress-bar'></div></div></div><div class='grid'><div class='chapter-card'><span class='tag'>Chapter 1</span><h3>Data Representation</h3><p>Binary, denary, hexadecimal.</p><a class='btn' href='chapters/chapter1.html'>Open Chapter 1</a></div><div class='chapter-card'><span class='tag'>Chapter 3</span><h3>Hardware</h3><p>CPU, I/O, storage and networking.</p><a class='btn' href='chapters/chapter3.html'>Open Chapter 3</a></div></div></main><script src='js/progress.js'></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>IGCSE CS Dashboard</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header>
+    <div class="hero-inner">
+      <p class="kicker">Student dashboard</p>
+      <h1>IGCSE CS Revision Studio</h1>
+      <p id="studentInfo">Chapter overview, concept mindmaps, exam-style checks.</p>
+    </div>
+  </header>
+  <main class="container">
+    <div class="topbar">
+      <div>
+        <h2 id="welcomeText">Welcome</h2>
+        <p>Pick a chapter. Finish the quiz to mark it complete.</p>
+      </div>
+      <div class="toolbar">
+        <a class="btn secondary" href="index.html">Home</a>
+        <button class="btn secondary" id="resetProgressBtn">Reset Progress</button>
+      </div>
+    </div>
+    <section class="panel">
+      <h3>Your Progress</h3>
+      <p id="progressText">0/10 chapters completed (0%)</p>
+      <div class="progress-wrap"><div id="progressBar" class="progress-bar"></div></div>
+    </section>
+    <section class="dashboard-grid" id="chapterGrid" aria-label="Chapter list"></section>
+  </main>
+  <footer>Based on the Cambridge IGCSE and O Level Computer Science textbook chapter structure.</footer>
+  <script src="js/content.js"></script>
+  <script src="js/progress.js"></script>
+</body>
+</html>

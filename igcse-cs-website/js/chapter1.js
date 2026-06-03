@@ -1,1 +1,0 @@
-document.getElementById('content').innerHTML=`<h3>Binary and Hex Basics</h3><p>Use chapter images from <code>assets/images/chapter1/</code>.</p><img src='../assets/images/chapter1/binary-place-value.png' style='max-width:100%'><p class='note'>Tip: 1 hex digit = 4 bits.</p>`;

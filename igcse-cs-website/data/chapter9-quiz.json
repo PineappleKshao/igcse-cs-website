@@ -1,0 +1,22 @@
+[
+  {
+    "question": "Which term means one row in a database table?",
+    "options": ["Field", "Record", "Primary key", "Query"],
+    "answer": 1
+  },
+  {
+    "question": "What is the main purpose of a primary key?",
+    "options": ["Sort records alphabetically", "Store images", "Uniquely identify each record", "Link to the internet"],
+    "answer": 2
+  },
+  {
+    "question": "Which is an advantage of databases over flat files?",
+    "options": ["Always smaller file size", "No need for validation", "Better data consistency", "Cannot be queried"],
+    "answer": 2
+  },
+  {
+    "question": "In SQL, which command is used to retrieve data?",
+    "options": ["SELECT", "UPDATE", "INSERT", "DELETE"],
+    "answer": 0
+  }
+]

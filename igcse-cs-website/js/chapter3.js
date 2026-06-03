@@ -1,1 +1,0 @@
-document.getElementById('content').innerHTML=`<h3>Hardware Essentials</h3><p>CPU, fetch-decode-execute, storage and network devices.</p><img src='../assets/images/chapter3/cpu-diagram.png' style='max-width:100%'><p class='note'>Tip: Use precise component names in exam answers.</p>`;
