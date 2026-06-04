@@ -33,6 +33,7 @@ A static website for Cambridge IGCSE Computer Science students. The site is orga
 - Exam-style answer patterns for each chapter, based on textbook/PPT concepts and 2018-2022 past-paper style.
 - Lesson Mode on every chapter page for projector-friendly classroom teaching.
 - Apple-inspired visual system across the home page, dashboard, Classroom Hub, chapter pages and Lesson Mode.
+- Anime.js-powered motion layer for page reveals, card stagger, click feedback and lesson transitions.
 - Responsive page scaling for desktop, projector and mobile screens.
 - Worked examples and command-word answer templates on chapter pages.
 - Classified-paper practice section using local chapter/year classified files.
@@ -61,6 +62,10 @@ igcse-cs-website/
     classroom.js          # Classroom Hub pack filtering UI
     chapter.js            # Reusable chapter page, quiz, worked-example and lesson-mode renderer
     progress.js           # Dashboard and progress renderer
+    site-animations.js    # Shared Anime.js motion layer
+    vendor/
+      anime.esm.min.js    # Local Anime.js v4 bundle
+      anime-LICENSE.md    # Anime.js MIT license
   tools/
     generate-classified-data.js
     generate-powerpoint-data.js
@@ -188,6 +193,14 @@ The site now uses one consistent Apple-inspired interface across all main pages:
 - blue primary actions and simple pill controls
 - responsive chapter pages that keep teaching controls reachable on smaller screens
 - lighter Lesson Mode visuals instead of a black presentation screen
+
+The shared animation layer is implemented with a local copy of Anime.js v4, based on the `juliangarnier/anime` project. It adds subtle teaching-focused motion:
+
+- page titles and main actions reveal in sequence
+- dashboard, classroom and chapter cards fade in as they enter the viewport
+- section cards, tabs, mindmap nodes and buttons give quick click feedback
+- Lesson Mode opens and changes slides with light transitions
+- reduced-motion browser settings are respected automatically
 
 ## Editing Chapter Content
 
