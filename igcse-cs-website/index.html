@@ -3,81 +3,127 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>IGCSE Computer Science Studio</title>
+  <title>IGCSE CS Teaching Companion</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
-<body class="apple-home">
+<body class="apple-home teacher-home">
   <nav class="apple-nav" aria-label="Main navigation">
-    <a href="index.html" class="brand-mark">IGCSE CS</a>
+    <a href="index.html" class="brand-mark">IGCSE CS Teaching Companion</a>
     <div>
-      <a href="dashboard.html">Dashboard</a>
-      <a href="classroom.html">Classroom</a>
-      <a href="chapters/chapter1.html">Chapter 1</a>
-      <a href="chapters/chapter10.html">Logic</a>
+      <a href="index.html">Home</a>
+      <a href="dashboard.html">Teacher Panel</a>
+      <a href="dashboard.html#chapterLibrary">Chapter Library</a>
+      <a href="dashboard.html#activityTools">Activities</a>
     </div>
   </nav>
   <main>
-    <section class="apple-hero">
-      <p class="apple-eyebrow">Cambridge IGCSE 0478</p>
-      <h1>IGCSE CS Revision Studio</h1>
-      <p class="apple-subtitle">A visual study space for concept maps, exam highlights, quick checks, and the whole Computer Science course at a glance.</p>
-      <div class="apple-actions">
-        <a class="apple-primary" href="dashboard.html">Open Dashboard</a>
-        <a class="apple-link" href="classroom.html">Teacher classroom hub</a>
-        <a class="apple-link" href="#overview">See what is inside</a>
+    <section class="apple-hero teacher-hero">
+      <p class="apple-eyebrow">A classroom teaching companion for IGCSE Computer Science teachers.</p>
+      <h1>IGCSE Computer Science Teaching Companion</h1>
+      <p class="apple-subtitle">Teach concepts clearly. Check understanding. Reveal common mistakes. Keep the class on one projected screen.</p>
+      <div class="apple-actions teacher-action-row">
+        <a class="apple-primary" href="dashboard.html#todayLesson">Start Teaching</a>
+        <a class="apple-primary secondary-action" href="dashboard.html#activityTools">Run Class Check</a>
+        <a class="apple-link" href="dashboard.html#chapterLibrary">Open Chapter Library</a>
       </div>
-      <div class="product-stage" aria-label="Revision studio preview">
-        <div class="device-shell">
-          <div class="device-toolbar">
-            <span></span><span></span><span></span>
-            <b>Revision Studio</b>
+      <div class="teacher-stage" aria-label="Teaching companion preview">
+        <div class="teacher-device">
+          <div class="teacher-device-top">
+            <span>Today</span>
+            <b>Chapter 3 · Hardware</b>
           </div>
-          <div class="device-screen">
-            <div class="screen-sidebar">
-              <span class="active"></span>
-              <span></span>
-              <span></span>
-              <span></span>
-            </div>
-            <div class="screen-main">
-              <div class="screen-header">
-                <p>Course overview</p>
-                <strong>10 chapters</strong>
-              </div>
-              <div class="screen-map">
-                <span class="map-dot center">CS</span>
-                <span class="map-dot d1">Binary</span>
-                <span class="map-dot d2">Hardware</span>
-                <span class="map-dot d3">Algorithms</span>
-                <span class="map-dot d4">Logic</span>
-              </div>
-              <div class="screen-cards">
-                <span>Exam focus</span>
-                <span>Mindmap</span>
-                <span>Quiz</span>
-              </div>
-            </div>
+          <div class="teacher-device-grid">
+            <article>
+              <small>Teach Card</small>
+              <strong>RAM</strong>
+              <p>Script, visual analogy, keywords, quick check.</p>
+            </article>
+            <article class="warning">
+              <small>Common Mistake</small>
+              <strong>“RAM saves forever.”</strong>
+              <p>Reveal why the answer loses marks.</p>
+            </article>
+            <article class="success">
+              <small>Class Check</small>
+              <strong>Reveal</strong>
+              <p>Students think first, then compare with the model.</p>
+            </article>
           </div>
         </div>
       </div>
     </section>
-    <section class="apple-overview" id="overview">
+
+    <section class="apple-overview teaching-flow" id="overview">
       <div>
-        <p class="apple-eyebrow">Overview first</p>
-        <h2>One clean path through the syllabus.</h2>
+        <p class="apple-eyebrow">Today’s Teaching Flow</p>
+        <h2>A simple classroom flow.</h2>
       </div>
-      <div class="apple-feature-grid">
+      <div class="apple-feature-grid five-step-flow">
         <article>
           <strong>Teach</strong>
-          <span>Open lesson mode for a projector-friendly chapter walk-through.</span>
+          <span>Explain the concept with a clear visual and teacher script.</span>
         </article>
         <article>
-          <strong>Revise</strong>
-          <span>Use mindmaps, highlights and worked examples to connect ideas.</span>
+          <strong>Check</strong>
+          <span>Ask one quick question to check understanding.</span>
         </article>
         <article>
-          <strong>Print</strong>
-          <span>Prepare compact worksheet and homework packs from the classroom hub.</span>
+          <strong>Practise</strong>
+          <span>Let students write an exam-style answer before seeing the model.</span>
+        </article>
+        <article>
+          <strong>Review</strong>
+          <span>Show the model answer and common mistakes.</span>
+        </article>
+        <article>
+          <strong>Exit</strong>
+          <span>End with one short question before students leave.</span>
+        </article>
+      </div>
+    </section>
+
+    <section class="teacher-home-section" id="quickLaunch">
+      <div class="section-title-row">
+        <p class="apple-eyebrow">Quick Launch</p>
+        <h2>Start from the classroom action, not the file list.</h2>
+      </div>
+      <div class="quick-launch-grid">
+        <a href="chapters/chapter1.html">Data Representation</a>
+        <a href="chapters/chapter3.html#teacher-companion">Hardware</a>
+        <a href="chapters/chapter10.html">Logic Gates</a>
+        <a href="chapters/chapter8.html">Pseudocode</a>
+        <a href="chapters/chapter7.html">Flowcharts</a>
+        <a href="chapters/chapter7.html">Trace Tables</a>
+        <a href="chapters/chapter5.html">Networks</a>
+        <a href="chapters/chapter9.html">Databases</a>
+      </div>
+    </section>
+
+    <section class="teacher-home-section" id="classroomTools">
+      <div class="section-title-row">
+        <p class="apple-eyebrow">Classroom Tools</p>
+        <h2>Tools for projection, checks, discussion and feedback.</h2>
+      </div>
+      <div class="teacher-tool-grid">
+        <article>
+          <span>01</span>
+          <h3>Projector Mode</h3>
+          <p>Large font, clean screen, suitable for classroom display.</p>
+        </article>
+        <article>
+          <span>02</span>
+          <h3>Reveal Answers</h3>
+          <p>Reveal only the current card answer after students think or discuss.</p>
+        </article>
+        <article>
+          <span>03</span>
+          <h3>Exam Answer Training</h3>
+          <p>Compare weak answers and strong answers using mark-point language.</p>
+        </article>
+        <article>
+          <span>04</span>
+          <h3>Exit Tickets</h3>
+          <p>Finish the lesson with one short check that tells you what to reteach.</p>
         </article>
       </div>
     </section>

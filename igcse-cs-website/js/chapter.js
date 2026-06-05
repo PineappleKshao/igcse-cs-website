@@ -7,6 +7,7 @@
   const classifiedPapers = window.CLASSIFIED_PAPERS ? window.CLASSIFIED_PAPERS.papers.filter(item => item.chapter === chapterId) : [];
   const chapterResources = window.getChapterResources ? window.getChapterResources(chapterId) : [];
   const lessonDecks = window.getChapterLessonDecks ? window.getChapterLessonDecks(chapterId) : [];
+  const reviewNotes = window.getReviewNotes ? window.getReviewNotes(chapterId) : null;
   const root = document.getElementById("chapterRoot");
   if(!chapter || !root){
     if(root) root.innerHTML = "<section class='panel'><h2>Chapter not found</h2><a class='btn' href='../dashboard.html'>Back to dashboard</a></section>";
@@ -32,7 +33,6 @@
       </div>
       <div class="cockpit-actions">
         <a class="icon-btn" href="../dashboard.html" aria-label="Dashboard" title="Dashboard">⌂</a>
-        <a class="icon-btn" href="../classroom.html" aria-label="Classroom" title="Classroom">▦</a>
         <button class="btn coral" id="lessonModeBtn">Start Lesson</button>
         <button class="btn ${isComplete ? "secondary" : ""}" id="completeBtn">${isComplete ? "Completed" : "Mark Complete"}</button>
       </div>
@@ -40,15 +40,15 @@
     <section class="lesson-control panel">
       <div class="mode-tabs" role="tablist" aria-label="Chapter mode">
         <button class="mode-tab active" data-mode="teach" type="button">Teach</button>
-        <button class="mode-tab" data-mode="revise" type="button">Revise</button>
-        <button class="mode-tab" data-mode="practise" type="button">Practise</button>
+        <button class="mode-tab" data-mode="revise" type="button">Overview</button>
+        <button class="mode-tab" data-mode="practise" type="button">Exit Check</button>
       </div>
       <div class="teacher-actions" aria-label="Teacher controls">
         <button class="btn secondary" id="toggleAnswersBtn" type="button">Hide Answers</button>
-        <button class="btn secondary print-btn" onclick="window.print()" type="button">Print</button>
-        <a class="btn secondary" href="../classroom.html?chapter=${chapter.id}">Resources</a>
+        <button class="btn secondary" id="projectorModeBtn" type="button">Projector Mode</button>
       </div>
     </section>
+    ${renderTeacherCompanion(chapter)}
     ${renderSectionBrowser(chapter, guide, pack, classifiedPapers, chapterResources)}
     <section class="chapter-hero compact-hero" data-mode-section data-modes="revise">
       <div class="panel">
@@ -63,17 +63,17 @@
       </div>
     </section>
     <div data-mode-section data-modes="revise">${renderChapterSummary(chapter, pack)}</div>
+    <div data-mode-section data-modes="teach revise">${renderReviewNotes(chapter, reviewNotes)}</div>
     <section class="lesson-layout" data-mode-section data-modes="revise practise">
       <nav class="side-menu" aria-label="Chapter sections">
         <a href="#summary">Summary Box</a>
+        <a href="#review-notes">Review Notes</a>
         <a href="#mindmap">Mindmap</a>
         <a href="#concepts">Core Concepts</a>
         <a href="#diagram">Visual Model</a>
         <a href="#answer-shapes">Answer Shapes</a>
         <a href="#worked">Worked Example</a>
         <a href="#exam">Frequent Questions</a>
-        <a href="#pack">Worksheet / Homework</a>
-        <a href="#classified">Classified Papers</a>
         <a href="#one-page">One-Page Summary</a>
         <a href="#quiz">Quick Quiz</a>
       </nav>
@@ -114,16 +114,9 @@
             ${chapter.frequent.map(([q,a])=>`<details class="qa-item"><summary>${q}</summary><p>${a}</p></details>`).join("")}
           </div>
         </section>
-        <div data-mode-section data-modes="practise">${pack ? renderPracticePack(pack) : ""}</div>
-        <div data-mode-section data-modes="practise">${renderClassifiedPapers(classifiedPapers)}</div>
         <div data-mode-section data-modes="revise">${renderOnePageSummary(chapter, pack)}</div>
-        <section class="panel" data-mode-section data-modes="practise">
-          <h2>Teaching Pack</h2>
-          <p>Open the classroom hub with this chapter selected to print packs or find classified-paper files.</p>
-          <a class="btn" href="../classroom.html?chapter=${chapter.id}">Open Chapter ${chapter.id} Resources</a>
-        </section>
         <section class="panel" id="quiz" data-mode-section data-modes="revise practise">
-          <h2>Quick Quiz</h2>
+          <h2>Exit Ticket</h2>
           <div id="quizMount"></div>
           <p id="quizFeedback" class="feedback" aria-live="polite"></p>
         </section>
@@ -141,6 +134,9 @@
   setupAnswerToggle();
   setupLessonMode();
   setupCopyButtons();
+  setupTeacherCompanion();
+  setupProjectorMode();
+  setupHashNavigation();
 
   function renderMindmap(chapter){
     return `<div class="map-canvas">
@@ -150,6 +146,167 @@
         return `<button class="map-node n${index+1}${index === 0 ? " active" : ""}" data-map-index="${index}" type="button"><span>${node}</span><small>${labels[index] || "Focus"}</small></button>`;
       }).join("")}
     </div>`;
+  }
+
+  function renderTeacherCompanion(chapter){
+    const teachCards = getTeachCards(chapter);
+    const mistakes = getCommonMistakeCards(chapter);
+    const training = getExamTrainingCards(chapter);
+    if(!teachCards.length) return "";
+    return `<section class="panel teacher-companion" id="teacher-companion" data-mode-section data-modes="teach">
+      <div class="section-browser-head">
+        <div>
+          <p class="kicker">Classroom Teaching Mode</p>
+          <h2>Teach, check, discuss, reveal.</h2>
+          <p>Use this part directly in class: explain one concept, ask students to think, discuss the common mistake, then reveal a short model answer.</p>
+        </div>
+        <div class="teacher-card-counter">
+          <strong id="teachCardCounter">1</strong>
+          <span>/ ${teachCards.length} teach cards</span>
+        </div>
+      </div>
+      <div class="teach-card-stage">
+        ${teachCards.map((card, index) => renderTeachCard(card, index)).join("")}
+      </div>
+      <div class="teach-card-controls">
+        <button class="btn secondary" id="teachCardPrev" type="button">Previous Teach Card</button>
+        <button class="btn" id="teachCardNext" type="button">Next Teach Card</button>
+      </div>
+      ${renderCommonMistakes(mistakes)}
+      ${renderExamTraining(training)}
+    </section>`;
+  }
+
+  function getTeachCards(chapter){
+    if(chapter.teachCards && chapter.teachCards.length) return chapter.teachCards;
+    return chapter.concepts.map(([title, body], index) => {
+      const frequent = chapter.frequent[index % chapter.frequent.length] || chapter.frequent[0];
+      return {
+        concept:title,
+        simpleExplanation:body,
+        teacherScript:`Start with the simple definition: ${body} Then point to the visual route "${chapter.diagram.title}" and ask students where this idea appears in an exam scenario.`,
+        visualAnalogy:`Use the chapter visual route: ${chapter.diagram.steps.join(" → ")}.`,
+        keyExamWords:getKeyExamWords(chapter, title, body),
+        quickCheck:frequent ? frequent[0] : `Explain ${title} in one sentence.`,
+        quickCheckAnswer:frequent ? frequent[1] : body
+      };
+    });
+  }
+
+  function getCommonMistakeCards(chapter){
+    if(chapter.commonMistakes && chapter.commonMistakes.length) return chapter.commonMistakes;
+    return chapter.concepts.slice(0, 5).map(([title, body], index) => {
+      const trap = getExamTraps(chapter)[index % getExamTraps(chapter).length];
+      return {
+        title,
+        mistake:`${title} is good and useful.`,
+        whyWrong:"This is too vague for an exam answer. It does not describe the concept clearly or link to the scenario.",
+        correctThinking:trap,
+        betterAnswer:body
+      };
+    });
+  }
+
+  function getExamTrainingCards(chapter){
+    if(chapter.examAnswerTraining && chapter.examAnswerTraining.length) return chapter.examAnswerTraining;
+    const source = chapter.frequent.length ? chapter.frequent : chapter.exam.map(item => [item, item]);
+    return source.slice(0, 4).map(([question, answer], index) => ({
+      question,
+      weakAnswer:"It is faster / easier / better.",
+      problem:"The answer is generic. It needs a precise technical point and, if possible, a link to the scenario.",
+      betterAnswer:answer,
+      markPoints:getKeyExamWords(chapter, chapter.concepts[index % chapter.concepts.length][0], answer).slice(0, 5),
+      studentTask:"Rewrite the answer using one technical term and one because phrase."
+    }));
+  }
+
+  function getKeyExamWords(chapter, title, body){
+    const words = `${title} ${body} ${chapter.map.join(" ")}`
+      .replace(/[^a-zA-Z0-9\s-]/g, " ")
+      .split(/\s+/)
+      .map(word => word.trim())
+      .filter(word => word.length > 3 && !["that", "this", "with", "from", "using", "used", "than", "then", "they", "when", "where", "which", "will", "into", "data"].includes(word.toLowerCase()));
+    return [...new Set(words)].slice(0, 6);
+  }
+
+  function renderTeachCard(card, index){
+    return `<article class="teach-card-slide${index === 0 ? " active" : ""}" data-teach-card="${index}">
+      <div class="teach-card-main">
+        <span class="tag">Teach Card ${index + 1}</span>
+        <h3>${escapeHtml(card.concept)}</h3>
+        <p class="teach-simple">${escapeHtml(card.simpleExplanation)}</p>
+        <div class="teacher-script">
+          <b>Teacher Script</b>
+          <p>${escapeHtml(card.teacherScript)}</p>
+        </div>
+      </div>
+      <aside class="teach-card-side">
+        <article>
+          <b>Visual / Analogy</b>
+          <p>${escapeHtml(card.visualAnalogy)}</p>
+        </article>
+        <article>
+          <b>Key Exam Words</b>
+          <div class="term-cloud">${card.keyExamWords.map(word => `<span>${escapeHtml(word)}</span>`).join("")}</div>
+        </article>
+        <article class="question-card">
+          <b>Think First</b>
+          <p>${escapeHtml(card.quickCheck)}</p>
+          <p class="class-prompt">Ask students to write or discuss for 30 seconds before revealing.</p>
+          <button class="btn secondary toggle-answer-btn" type="button">Reveal Model Answer</button>
+          <div class="answer-block hidden-answer">${escapeHtml(card.quickCheckAnswer)}</div>
+        </article>
+      </aside>
+    </article>`;
+  }
+
+  function renderCommonMistakes(items){
+    if(!items.length) return "";
+    return `<section class="teacher-training-section" id="common-mistakes">
+      <div class="topbar">
+        <div>
+          <p class="kicker">Common Mistakes</p>
+          <h2>Discuss the mistake before revealing the fix.</h2>
+        </div>
+      </div>
+      <div class="mistake-grid">
+        ${items.map((item, index) => `<article class="common-mistake-card question-card">
+          <span class="tag">Mistake ${index + 1}</span>
+          <h3>${escapeHtml(item.title)}</h3>
+          <div class="weak-answer"><b>Weak answer</b><p>${escapeHtml(item.mistake)}</p></div>
+          <div class="mistake-reason"><b>Why it is wrong</b><p>${escapeHtml(item.whyWrong)}</p></div>
+          <div class="correct-thinking"><b>Correct thinking</b><p>${escapeHtml(item.correctThinking)}</p></div>
+          <button class="btn secondary toggle-answer-btn" type="button">Reveal Better Answer</button>
+          <div class="answer-block better-answer hidden-answer">${escapeHtml(item.betterAnswer)}</div>
+        </article>`).join("")}
+      </div>
+    </section>`;
+  }
+
+  function renderExamTraining(items){
+    if(!items.length) return "";
+    return `<section class="teacher-training-section" id="exam-training">
+      <div class="topbar">
+        <div>
+          <p class="kicker">Class Check</p>
+          <h2>Students answer first, then compare.</h2>
+        </div>
+      </div>
+      <div class="exam-training-grid">
+        ${items.map((item, index) => `<article class="exam-training-card question-card">
+          <span class="tag">Training ${index + 1}</span>
+          <h3>${escapeHtml(item.question)}</h3>
+          <div class="weak-answer"><b>Weak answer</b><p>${escapeHtml(item.weakAnswer)}</p></div>
+          <div class="mistake-reason"><b>Problem</b><p>${escapeHtml(item.problem)}</p></div>
+          <p class="student-task"><strong>Student task:</strong> ${escapeHtml(item.studentTask)}</p>
+          <button class="btn secondary toggle-answer-btn" type="button">Reveal Model Answer</button>
+          <div class="answer-block hidden-answer">
+            <div class="better-answer"><b>Better answer</b><p>${escapeHtml(item.betterAnswer)}</p></div>
+            <div class="mark-points"><b>Mark points</b><ul>${item.markPoints.map(point => `<li>${escapeHtml(point)}</li>`).join("")}</ul></div>
+          </div>
+        </article>`).join("")}
+      </div>
+    </section>`;
   }
 
   function renderSectionBrowser(chapter, guide, pack, classifiedPapers, resources){
@@ -574,6 +731,67 @@
     </section>`;
   }
 
+  function renderReviewNotes(chapter, notes){
+    if(!notes) return "";
+    const rules = window.REVIEW_NOTES && window.REVIEW_NOTES.rules ? window.REVIEW_NOTES.rules : [];
+    return `<section class="panel review-notes" id="review-notes">
+      <div class="review-notes-head">
+        <div>
+          <p class="kicker">Exam-Style Answer Notes</p>
+          <h2>Chapter ${chapter.id}: ${escapeHtml(notes.title || chapter.title)}</h2>
+          <p>${escapeHtml(notes.intro || chapter.summary)}</p>
+        </div>
+        <div class="review-badge">
+          <strong>Mark scheme style</strong>
+          <span>short · precise · technical</span>
+        </div>
+      </div>
+      <div class="review-rules">
+        ${rules.map(([command, answer]) => `<article>
+          <b>${escapeHtml(command)}</b>
+          <span>${escapeHtml(answer)}</span>
+        </article>`).join("")}
+      </div>
+      <div class="review-section-list">
+        ${notes.sections.map((section, index) => renderReviewSection(section, index)).join("")}
+      </div>
+      <div class="review-checklist">
+        <h3>Final Exam Checklist</h3>
+        <ul>${notes.checklist.map(item => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
+      </div>
+    </section>`;
+  }
+
+  function renderReviewSection(section, index){
+    const content = {
+      table: () => renderReviewTable(section),
+      bullets: () => `<ul class="review-bullets">${section.items.map(item => `<li>${escapeHtml(item)}</li>`).join("")}</ul>`,
+      steps: () => `<ol class="review-steps">${section.items.map(item => `<li>${escapeHtml(item)}</li>`).join("")}</ol>`,
+      code: () => `<pre class="review-code"><code>${escapeHtml(section.code)}</code></pre>`
+    };
+    const render = content[section.type] || content.bullets;
+    return `<article class="review-section">
+      <div class="review-section-title">
+        <span>${String(index + 1).padStart(2, "0")}</span>
+        <h3>${escapeHtml(section.title)}</h3>
+      </div>
+      ${render()}
+    </article>`;
+  }
+
+  function renderReviewTable(section){
+    return `<div class="review-table-wrap">
+      <table class="review-table">
+        <thead>
+          <tr>${section.headers.map(header => `<th>${escapeHtml(header)}</th>`).join("")}</tr>
+        </thead>
+        <tbody>
+          ${section.rows.map(row => `<tr>${row.map(cell => `<td>${escapeHtml(cell)}</td>`).join("")}</tr>`).join("")}
+        </tbody>
+      </table>
+    </div>`;
+  }
+
   function renderOnePageSummary(chapter, pack){
     const keyTerms = chapter.concepts.map(([title]) => title);
     const questionPatterns = getQuestionPatterns(chapter, pack);
@@ -668,7 +886,9 @@
   }
 
   function shortenSentence(text, limit){
-    return text;
+    const value = String(text || "").replace(/\s+/g, " ").trim();
+    if(!limit || value.length <= limit) return value;
+    return `${value.slice(0, Math.max(0, limit - 1)).trim()}…`;
   }
 
   function renderQuiz(chapter){
@@ -781,13 +1001,97 @@
   function setupAnswerToggle(){
     const button = document.getElementById("toggleAnswersBtn");
     if(!button) return;
-    let answersVisible = true;
+    let answersVisible = localStorage.getItem("igcse_teacher_answers_visible") === "on";
+    applyAnswerVisibility(answersVisible);
     button.addEventListener("click", () => {
       answersVisible = !answersVisible;
-      document.querySelectorAll("details").forEach(detail => {
-        detail.open = answersVisible;
+      localStorage.setItem("igcse_teacher_answers_visible", answersVisible ? "on" : "off");
+      applyAnswerVisibility(answersVisible);
+    });
+  }
+
+  function applyAnswerVisibility(visible){
+    document.querySelectorAll("details").forEach(detail => {
+      detail.open = visible;
+    });
+    document.querySelectorAll(".answer-block").forEach(answer => {
+      answer.classList.toggle("hidden-answer", !visible);
+    });
+    document.querySelectorAll(".toggle-answer-btn").forEach(button => {
+      const showText = button.dataset.showText || button.textContent || "Show Answer";
+      const hideText = button.dataset.hideText || showText.replace(/^Show/, "Hide");
+      button.dataset.showText = showText;
+      button.dataset.hideText = hideText;
+      button.textContent = visible ? hideText : showText;
+    });
+    const button = document.getElementById("toggleAnswersBtn");
+    if(button) button.textContent = visible ? "Hide Answers" : "Show Answers";
+  }
+
+  function setupTeacherCompanion(){
+    const companion = document.getElementById("teacher-companion");
+    if(!companion) return;
+
+    let active = 0;
+    const slides = [...companion.querySelectorAll(".teach-card-slide")];
+    const counter = document.getElementById("teachCardCounter");
+    const showCard = index => {
+      active = Math.max(0, Math.min(slides.length - 1, index));
+      slides.forEach((slide, slideIndex) => {
+        slide.classList.toggle("active", slideIndex === active);
       });
-      button.textContent = answersVisible ? "Hide Answers" : "Show Answers";
+      if(counter) counter.textContent = String(active + 1);
+    };
+    const prev = document.getElementById("teachCardPrev");
+    const next = document.getElementById("teachCardNext");
+    if(prev) prev.addEventListener("click", () => showCard(active - 1));
+    if(next) next.addEventListener("click", () => showCard(active + 1));
+
+    companion.addEventListener("click", event => {
+      const button = event.target.closest(".toggle-answer-btn");
+      if(!button) return;
+      const card = button.closest(".question-card");
+      const answer = card && card.querySelector(".answer-block");
+      if(!answer) return;
+      const nextHidden = !answer.classList.contains("hidden-answer");
+      answer.classList.toggle("hidden-answer", nextHidden);
+      const showText = button.dataset.showText || button.textContent || "Show Answer";
+      const hideText = button.dataset.hideText || showText.replace(/^Show/, "Hide");
+      button.dataset.showText = showText;
+      button.dataset.hideText = hideText;
+      button.textContent = nextHidden ? showText : hideText;
+    });
+
+    applyAnswerVisibility(localStorage.getItem("igcse_teacher_answers_visible") === "on");
+    showCard(0);
+  }
+
+  function setupProjectorMode(){
+    const key = "igcse_projector_mode";
+    const button = document.getElementById("projectorModeBtn");
+    const setMode = on => {
+      document.body.classList.toggle("projector-mode", on);
+      localStorage.setItem(key, on ? "on" : "off");
+      if(button) button.textContent = on ? "Exit Projector Mode" : "Projector Mode";
+    };
+    setMode(localStorage.getItem(key) === "on");
+    if(button) button.addEventListener("click", () => setMode(!document.body.classList.contains("projector-mode")));
+  }
+
+  function setupHashNavigation(){
+    if(!location.hash) return;
+    const targetHash = location.hash;
+    const teachTargets = ["#teacher-companion", "#common-mistakes", "#exam-training", "#sectionBrowser"];
+    const practiseTargets = ["#pack", "#classified", "#quiz"];
+    const reviseTargets = ["#summary", "#review-notes", "#mindmap", "#exam", "#one-page"];
+    const mode = teachTargets.includes(targetHash) ? "teach" : practiseTargets.includes(targetHash) ? "practise" : reviseTargets.includes(targetHash) ? "revise" : null;
+    if(mode){
+      const tab = document.querySelector(`.mode-tab[data-mode="${mode}"]`);
+      if(tab) tab.click();
+    }
+    requestAnimationFrame(() => {
+      const target = document.querySelector(targetHash);
+      if(target) target.scrollIntoView({ behavior:"smooth", block:"start" });
     });
   }
 
@@ -947,8 +1251,14 @@
             <span id="lessonCounter">1 / ${decks[0].slideCount}</span>
             <strong id="lessonDeckTitle">${escapeHtml(decks[0].topic)} · ${escapeHtml(decks[0].title)}</strong>
           </div>
-          <button class="lesson-close" id="lessonCloseBtn">Close</button>
+          <div class="lesson-tool-strip">
+            <button class="lesson-tool" id="lessonOverviewBtn" type="button" title="Overview">Overview</button>
+            <button class="lesson-tool" id="lessonNotesBtn" type="button" title="Teacher notes">Notes</button>
+            <button class="lesson-tool" id="lessonFullscreenBtn" type="button" title="Fullscreen">Fullscreen</button>
+            <button class="lesson-close" id="lessonCloseBtn" type="button">Close</button>
+          </div>
         </div>
+        <div class="lesson-progress" aria-hidden="true"><span id="lessonProgressBar"></span></div>
         <div class="lesson-deck-rail" aria-label="PowerPoint decks">
           ${decks.map((deck, deckIndex) => `<button class="${deckIndex === 0 ? "active" : ""}" data-lesson-deck="${deckIndex}" data-lesson-bg="${escapeHtml(lessonImage(deck))}" style="--deck-thumb:url('${escapeHtml(lessonImage(deck))}')" type="button">
             <span>T${deck.topicNumber || deckIndex + 1}</span>
@@ -959,6 +1269,18 @@
         <div class="lesson-slide-stack">
           ${decks.map((deck, deckIndex) => deck.slides.map((slide, slideIndex) => renderPowerPointLessonSlide(deck, deckIndex, slide, slideIndex)).join("")).join("")}
         </div>
+        <div class="lesson-overview hidden" id="lessonOverview" aria-label="Slide overview">
+          ${decks.map((deck, deckIndex) => `<section>
+            <h3>${escapeHtml(deck.topic)}</h3>
+            <div class="lesson-overview-grid">
+              ${deck.slides.map((slide, slideIndex) => `<button class="${deckIndex === 0 && slideIndex === 0 ? "active" : ""}" data-overview-deck="${deckIndex}" data-overview-slide="${slideIndex}" type="button">
+                <span>${slideIndex + 1}</span>
+                <b>${escapeHtml(shortenSentence(slide.title, 62))}</b>
+              </button>`).join("")}
+            </div>
+          </section>`).join("")}
+        </div>
+        <aside class="lesson-notes hidden" id="lessonNotes" aria-live="polite"></aside>
         <div class="lesson-controls">
           <a class="btn secondary" id="lessonOpenDeckBtn" href="${decks[0].href}" target="_blank" rel="noreferrer">Open PPT</a>
           <button class="btn secondary" id="lessonPrevBtn">Previous</button>
@@ -970,20 +1292,48 @@
 
   function renderPowerPointLessonSlide(deck, deckIndex, slide, slideIndex){
     const titleClass = slide.title.length > 54 ? " compact-title" : "";
-    return `<article class="lesson-slide${deckIndex === 0 && slideIndex === 0 ? " active" : ""}" data-deck-index="${deckIndex}" data-slide-index="${slideIndex}">
+    const purpose = getSlidePurpose(slide);
+    return `<article class="lesson-slide${deckIndex === 0 && slideIndex === 0 ? " active" : ""}" data-deck-index="${deckIndex}" data-slide-index="${slideIndex}" data-slide-purpose="${purpose}">
       <div class="lesson-slide-inner">
         <div class="lesson-copy">
           <div class="lesson-meta-row">
             <span>${escapeHtml(deck.topic)}</span>
             <span>PPT slide ${slide.number}</span>
+            <span>${escapeHtml(formatPurpose(purpose))}</span>
           </div>
           <h2 class="${titleClass}">${emphasiseTitle(slide.title)}</h2>
           ${renderLessonPoints(slide)}
           <p class="lesson-source">Source: ${escapeHtml(deck.title)}</p>
         </div>
-        ${renderLessonVisual(deck, slide)}
+        ${renderLessonVisual(deck, slide, purpose)}
       </div>
     </article>`;
+  }
+
+  function getSlidePurpose(slide){
+    const text = `${slide.title} ${(slide.lines || []).join(" ")}`.toLowerCase();
+    if(/starter|warm.?up|what do you think|discuss|think/.test(text)) return "starter";
+    if(/objective|learning goal|success criteria|understand /.test(text)) return "objectives";
+    if(/summary|recap|review|plenary/.test(text)) return "summary";
+    if(/question|task|activity|try|complete|calculate|write an algorithm|trace/.test(text)) return "activity";
+    if(/answer|solution|mark scheme|exam/.test(text)) return "exam";
+    if(/compare|difference|advantages|disadvantages|evaluate/.test(text)) return "compare";
+    if(/example|method|steps|process|cycle/.test(text)) return "method";
+    return "explain";
+  }
+
+  function formatPurpose(purpose){
+    const labels = {
+      starter:"Starter",
+      objectives:"Objectives",
+      summary:"Summary",
+      activity:"Activity",
+      exam:"Exam link",
+      compare:"Compare",
+      method:"Method",
+      explain:"Explain"
+    };
+    return labels[purpose] || "Slide";
   }
 
   function renderLessonPoints(slide){
@@ -1026,16 +1376,13 @@
     return deck.thumbnail || deck.fallbackBackground || "../assets/lesson-backgrounds/cs-fallback.png";
   }
 
-  function renderLessonVisual(deck, slide){
+  function renderLessonVisual(deck, slide, purpose){
     const type = getLessonVisualType(deck, slide);
     const title = escapeHtml(deck.topic || "Lesson visual");
     const subtitle = escapeHtml(shortVisualLabel(slide.title || deck.title));
     const keywords = extractVisualKeywords(deck, slide, type);
-    return `<figure class="lesson-visual ${type}" aria-label="${title} visual">
-      <div class="visual-orbit">
-        <span></span><span></span><span></span>
-      </div>
-      <div class="visual-scene">${renderVisualScene(type, keywords)}</div>
+    return `<figure class="lesson-visual visual-${type} purpose-${purpose}" aria-label="${title} visual">
+      <div class="visual-scene">${renderVisualScene(type, purpose, keywords, slide)}</div>
       <figcaption>
         <b>${title}</b>
         <span>${subtitle}</span>
@@ -1059,21 +1406,63 @@
     return "hardware";
   }
 
-  function renderVisualScene(type, keywords){
+  function renderVisualScene(type, purpose, keywords, slide){
     const labels = getVisualLabels(type, keywords);
+    if(purpose === "starter") return renderStarterVisual(labels, slide);
+    if(purpose === "objectives") return renderObjectivesVisual(slide);
+    if(purpose === "summary") return renderSummaryVisual(labels, slide);
+    if(purpose === "activity") return renderActivityVisual(labels, slide);
     const scenes = {
-      hardware: `<div class="chip-core"><span>${labels[0]}</span><span>${labels[1]}</span><span>${labels[2]}</span></div><div class="bus-lines"><i></i><i></i><i></i></div><div class="device-row"><b>${labels[3]}</b><b>${labels[4]}</b><b>${labels[5]}</b></div>`,
-      data: `<div class="binary-rain"><span>${labels[0]}</span><span>${labels[1]}</span><span>${labels[2]}</span><span>${labels[3]}</span></div><div class="data-cubes"><b></b><b></b><b></b><b></b></div>`,
-      network: `<div class="network-map"><b></b><b></b><b></b><b></b><i></i><i></i><i></i></div><div class="packet-train"><span>${labels[0]}</span><span>${labels[1]}</span><span>${labels[2]}</span></div>`,
-      security: `<div class="shield-lock"><b></b><span></span></div><div class="secure-dots"><i></i><i></i><i></i><i></i></div>`,
-      software: `<div class="code-window"><b></b><span>${labels[0]}</span><span>${labels[1]}</span><span>${labels[2]}</span></div><div class="translator-flow"><i>${labels[3]}</i><i>${labels[4]}</i><i>${labels[5]}</i></div>`,
-      robotics: `<div class="control-loop"><span>${labels[0]}</span><span>${labels[1]}</span><span>${labels[2]}</span></div><div class="robot-arm"><b></b><b></b><b></b></div>`,
-      algorithm: `<div class="flowchart-visual"><span>${labels[0]}</span><span>${labels[1]}</span><span>${labels[2]}</span></div><div class="trace-grid"><i></i><i></i><i></i><i></i><i></i><i></i></div>`,
-      programming: `<div class="code-window"><b></b><span>${labels[0]}</span><span>${labels[1]}</span><span>${labels[2]}</span></div><div class="array-blocks"><i>0</i><i>1</i><i>2</i><i>3</i></div>`,
-      database: `<div class="database-cylinder"><b></b><span></span><span></span></div><div class="table-grid"><i>${labels[0]}</i><i>${labels[1]}</i><i>${labels[2]}</i><i>${labels[3]}</i><i>${labels[4]}</i><i>${labels[5]}</i></div>`,
-      logic: `<div class="logic-gates"><span>${labels[0]}</span><span>${labels[1]}</span><span>${labels[2]}</span></div><div class="truth-mini"><i>0</i><i>1</i><i>1</i><i>0</i></div>`
+      hardware: `<div class="visual-chip-board"><div class="chip-core"><span>${labels[0]}</span><span>${labels[1]}</span><span>${labels[2]}</span></div><div class="fde-lane"><i>Fetch</i><i>Decode</i><i>Execute</i></div><div class="bus-lines"><i></i><i></i><i></i></div></div>`,
+      data: `<div class="data-lab"><div class="binary-rain"><span>1010</span><span>0x${labels[1] || "AF"}</span><span>${labels[2]}</span><span>${labels[3]}</span></div><div class="pixel-grid">${Array.from({length:24}, (_, index) => `<i style="--shade:${18 + index * 2}%"></i>`).join("")}</div><div class="waveform"><i></i><i></i><i></i><i></i><i></i></div></div>`,
+      network: `<div class="network-lab"><div class="network-map"><b></b><b></b><b></b><b></b><i></i><i></i><i></i></div><div class="packet-train"><span>Header</span><span>Data</span><span>Trailer</span></div></div>`,
+      security: `<div class="security-lab"><div class="shield-lock"><b></b><span></span></div><div class="threat-card"><strong>${labels[0]}</strong><span>${labels[1]}</span><span>${labels[2]}</span></div></div>`,
+      software: `<div class="software-lab"><div class="os-stack"><span>Apps</span><span>OS</span><span>Drivers</span><span>Hardware</span></div><div class="translator-flow"><i>Source</i><i>Translate</i><i>Object</i></div></div>`,
+      robotics: `<div class="robotics-lab"><div class="control-loop"><span>Sensor</span><span>Processor</span><span>Actuator</span><span>Feedback</span></div><div class="robot-arm"><b></b><b></b><b></b></div></div>`,
+      algorithm: `<div class="algorithm-lab"><div class="flowchart-visual"><span>Input</span><span>Decision</span><span>Output</span></div><div class="trace-table">${Array.from({length:12}, (_, index) => `<i>${index < 4 ? ["Var","1","2","3"][index] : ""}</i>`).join("")}</div></div>`,
+      programming: `<div class="programming-lab"><div class="code-window"><b></b><span>DECLARE ${labels[0]}</span><span>IF condition</span><span>FOR index</span></div><div class="array-blocks"><i>1</i><i>2</i><i>3</i><i>4</i></div></div>`,
+      database: `<div class="database-lab"><div class="database-cylinder"><b></b><span></span><span></span></div><div class="sql-card"><strong>SELECT</strong><span>fields</span><strong>FROM</strong><span>table</span><strong>WHERE</strong><span>condition</span></div></div>`,
+      logic: `<div class="logic-lab"><div class="logic-gates"><span>AND</span><span>OR</span><span>NOT</span></div><div class="truth-mini"><i>A</i><i>B</i><i>Q</i><i>0</i><i>1</i><i>1</i></div></div>`
     };
     return scenes[type] || scenes.hardware;
+  }
+
+  function renderStarterVisual(labels, slide){
+    const prompts = (slide.lines || []).filter(Boolean).slice(0, 3);
+    return `<div class="starter-visual">
+      <div class="starter-mark">?</div>
+      <div class="starter-prompts">
+        ${(prompts.length ? prompts : labels.slice(0, 3)).map(item => `<span>${escapeHtml(shortenSentence(item, 56))}</span>`).join("")}
+      </div>
+      <small>Think → Pair → Share</small>
+    </div>`;
+  }
+
+  function renderObjectivesVisual(slide){
+    const objectives = (slide.lines || []).filter(line => !/^objectives?$/i.test(line)).slice(0, 4);
+    return `<div class="objectives-visual">
+      ${(objectives.length ? objectives : ["Define the key terms", "Explain the process", "Apply to an exam question"]).map((item, index) => `<article>
+        <b>${String(index + 1).padStart(2, "0")}</b>
+        <span>${escapeHtml(shortenSentence(item, 72))}</span>
+      </article>`).join("")}
+    </div>`;
+  }
+
+  function renderSummaryVisual(labels, slide){
+    const points = (slide.lines || []).filter(Boolean).slice(0, 5);
+    return `<div class="summary-visual">
+      <strong>Key takeaways</strong>
+      ${(points.length ? points : labels.slice(0, 5)).map(item => `<span>${escapeHtml(shortenSentence(item, 64))}</span>`).join("")}
+    </div>`;
+  }
+
+  function renderActivityVisual(labels, slide){
+    const task = (slide.lines || []).find(line => /\?|calculate|complete|write|draw|trace|identify/i.test(line)) || slide.title;
+    return `<div class="activity-visual">
+      <span class="activity-icon">Task</span>
+      <strong>${escapeHtml(shortenSentence(task, 92))}</strong>
+      <div>${labels.slice(0, 3).map(label => `<em>${escapeHtml(label)}</em>`).join("")}</div>
+    </div>`;
   }
 
   function extractVisualKeywords(deck, slide, type){
@@ -1158,9 +1547,13 @@
     if(!lesson) return;
     const slides = [...lesson.querySelectorAll(".lesson-slide")];
     const deckButtons = [...lesson.querySelectorAll("[data-lesson-deck]")];
+    const overview = document.getElementById("lessonOverview");
+    const overviewButtons = [...lesson.querySelectorAll("[data-overview-deck]")];
+    const notes = document.getElementById("lessonNotes");
     const counter = document.getElementById("lessonCounter");
     const deckTitle = document.getElementById("lessonDeckTitle");
     const openDeck = document.getElementById("lessonOpenDeckBtn");
+    const progressBar = document.getElementById("lessonProgressBar");
     let deckIndex = 0;
     let slideIndex = 0;
     const deckSlides = index => slides.filter(slide => Number(slide.dataset.deckIndex || 0) === index);
@@ -1175,6 +1568,11 @@
       if(counter) counter.textContent = `${slideIndex + 1} / ${currentDeckSlides.length}`;
       if(deckTitle && lessonDecks[deckIndex]) deckTitle.textContent = `${lessonDecks[deckIndex].topic} · ${lessonDecks[deckIndex].title}`;
       if(openDeck && lessonDecks[deckIndex]) openDeck.href = lessonDecks[deckIndex].href;
+      if(progressBar) progressBar.style.width = `${((slideIndex + 1) / Math.max(currentDeckSlides.length, 1)) * 100}%`;
+      overviewButtons.forEach(button => {
+        button.classList.toggle("active", Number(button.dataset.overviewDeck) === deckIndex && Number(button.dataset.overviewSlide) === slideIndex);
+      });
+      if(notes && lessonDecks[deckIndex]) notes.innerHTML = renderLessonNotes(lessonDecks[deckIndex], lessonDecks[deckIndex].slides[slideIndex], slideIndex, currentDeckSlides.length);
     };
     document.getElementById("lessonModeBtn").onclick = () => {
       lesson.classList.remove("hidden");
@@ -1188,18 +1586,79 @@
     deckButtons.forEach(button => {
       button.addEventListener("click", () => show(Number(button.dataset.lessonDeck), 0));
     });
-    const previous = () => show(deckIndex, slideIndex - 1);
-    const next = () => show(deckIndex, slideIndex + 1);
+    overviewButtons.forEach(button => {
+      button.addEventListener("click", () => {
+        show(Number(button.dataset.overviewDeck), Number(button.dataset.overviewSlide));
+        if(overview) overview.classList.add("hidden");
+      });
+    });
+    const previous = () => {
+      if(slideIndex > 0) return show(deckIndex, slideIndex - 1);
+      if(deckIndex > 0) return show(deckIndex - 1, deckSlides(deckIndex - 1).length - 1);
+      show(deckIndex, 0);
+    };
+    const next = () => {
+      const currentDeckSlides = deckSlides(deckIndex);
+      if(slideIndex < currentDeckSlides.length - 1) return show(deckIndex, slideIndex + 1);
+      if(deckIndex < deckButtons.length - 1) return show(deckIndex + 1, 0);
+      show(deckIndex, slideIndex);
+    };
     const prevButton = document.getElementById("lessonPrevBtn");
     const nextButton = document.getElementById("lessonNextBtn");
     if(prevButton) prevButton.onclick = previous;
     if(nextButton) nextButton.onclick = next;
+    const overviewButton = document.getElementById("lessonOverviewBtn");
+    if(overviewButton && overview){
+      overviewButton.addEventListener("click", () => overview.classList.toggle("hidden"));
+    }
+    const notesButton = document.getElementById("lessonNotesBtn");
+    if(notesButton && notes){
+      notesButton.addEventListener("click", () => notes.classList.toggle("hidden"));
+    }
+    const fullscreenButton = document.getElementById("lessonFullscreenBtn");
+    if(fullscreenButton){
+      fullscreenButton.addEventListener("click", async () => {
+        if(!document.fullscreenElement && lesson.requestFullscreen) await lesson.requestFullscreen();
+        else if(document.exitFullscreen) await document.exitFullscreen();
+      });
+    }
     document.addEventListener("keydown", event => {
       if(lesson.classList.contains("hidden")) return;
       if(event.key === "Escape") document.getElementById("lessonCloseBtn").click();
       if(event.key === "ArrowRight") next();
       if(event.key === "ArrowLeft") previous();
+      if(event.key.toLowerCase() === "o" && overview) overview.classList.toggle("hidden");
+      if(event.key.toLowerCase() === "n" && notes) notes.classList.toggle("hidden");
+      if(event.key.toLowerCase() === "f" && fullscreenButton) fullscreenButton.click();
     });
+  }
+
+  function renderLessonNotes(deck, slide, index, total){
+    const purpose = getSlidePurpose(slide);
+    const noteByPurpose = {
+      starter:"Ask students to answer before showing explanation. Use pair discussion or cold-call.",
+      objectives:"Point to the objective that will be checked later in the exit ticket.",
+      summary:"Use this as retrieval practice. Ask students to close notes and say one key idea.",
+      activity:"Give silent thinking time first, then discuss or reveal answer points.",
+      exam:"Make students underline the command word and write a mark-scheme style sentence.",
+      compare:"Force both sides of the comparison using the same feature.",
+      method:"Model the process once, then ask students to repeat the steps without help.",
+      explain:"Turn the slide into a short because sentence."
+    };
+    const lines = (slide.lines || []).slice(0, 4);
+    const question = chapter.frequent[index % chapter.frequent.length] || chapter.frequent[0];
+    const checklist = reviewNotes && reviewNotes.checklist ? reviewNotes.checklist[index % reviewNotes.checklist.length] : "";
+    return `<div>
+      <p class="kicker">Teacher Notes</p>
+      <h3>${escapeHtml(deck.topic)} · Slide ${index + 1}/${total}</h3>
+      <article>
+        <b>Teaching move</b>
+        <p>${escapeHtml(noteByPurpose[purpose] || noteByPurpose.explain)}</p>
+      </article>
+      ${lines.length ? `<article><b>Slide focus</b><ul>${lines.map(line => `<li>${escapeHtml(shortenSentence(line, 96))}</li>`).join("")}</ul></article>` : ""}
+      ${question ? `<article><b>Quick exam link</b><p>${escapeHtml(question[0])}</p><p><strong>Model idea:</strong> ${escapeHtml(question[1])}</p></article>` : ""}
+      ${checklist ? `<article><b>Must remember</b><p>${escapeHtml(checklist)}</p></article>` : ""}
+    </div>`;
   }
 
   function markComplete(id, score){

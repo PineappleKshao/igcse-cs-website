@@ -3,37 +3,107 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>IGCSE CS Dashboard</title>
+  <title>Teacher Control Panel</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
   <header>
     <div class="hero-inner">
-      <p class="kicker">Student dashboard</p>
-      <h1>IGCSE CS Revision Studio</h1>
-      <p id="studentInfo">Chapter overview, concept mindmaps, exam-style checks.</p>
+      <p class="kicker">Teacher Control Panel</p>
+      <h1>Prepare today’s IGCSE CS lesson.</h1>
+      <p id="studentInfo">Open a classroom-ready flow for teaching, checking, discussing and revealing model answers.</p>
     </div>
   </header>
-  <main class="container">
+  <main class="container teacher-panel">
     <div class="topbar">
       <div>
-        <h2 id="welcomeText">Welcome</h2>
-        <p>Pick a chapter. Finish the quiz to mark it complete.</p>
+        <h2 id="welcomeText">Teacher Control Panel</h2>
+        <p>Choose today’s topic, open a projector-ready teaching flow, and keep the class focused on one screen.</p>
       </div>
       <div class="toolbar">
         <a class="btn secondary" href="index.html">Home</a>
-        <a class="btn secondary" href="classroom.html">Classroom Hub</a>
-        <button class="btn secondary" id="resetProgressBtn">Reset Progress</button>
+        <button class="btn" id="panelProjectorBtn" type="button">Start Projector Mode</button>
       </div>
     </div>
-    <section class="panel">
-      <h3>Your Progress</h3>
-      <p id="progressText">0/10 chapters completed (0%)</p>
-      <div class="progress-wrap"><div id="progressBar" class="progress-bar"></div></div>
+
+    <section class="panel today-lesson-panel" id="todayLesson">
+      <div class="topbar">
+        <div>
+          <p class="kicker">Today’s Lesson</p>
+          <h2>Choose what you are teaching today.</h2>
+        </div>
+      </div>
+      <div class="lesson-picker">
+        <label>Chapter
+          <select id="todayChapterSelect"></select>
+        </label>
+        <div class="teacher-launch-actions">
+          <a class="btn" id="openTeachMode" href="#">Open Classroom Flow</a>
+          <a class="btn secondary" id="openActivityMode" href="#">Open Section View</a>
+          <a class="btn secondary" id="openExamMode" href="#">Open Answer Training</a>
+          <a class="btn secondary" id="openExitTicket" href="#">Open Exit Ticket</a>
+        </div>
+      </div>
     </section>
-    <section class="dashboard-grid" id="chapterGrid" aria-label="Chapter list"></section>
+
+    <section class="panel" id="quickActions">
+      <p class="kicker">Quick Classroom Actions</p>
+      <h2>Use during class.</h2>
+      <div class="control-action-grid">
+        <button class="btn secondary" id="quickProjectorBtn" type="button">Start Projector Mode</button>
+        <button class="btn secondary" id="exitTicketBtn" type="button">Open Exit Ticket</button>
+        <a class="btn secondary" href="#activityTools">Open Class Check Tools</a>
+        <a class="btn secondary" href="#teacherNotes">Write Teaching Notes</a>
+      </div>
+    </section>
+
+    <section class="panel">
+      <p class="kicker">Suggested Lesson Flow</p>
+      <h2>A 40-minute structure.</h2>
+      <div class="lesson-flow-grid">
+        <article><b>Starter Question</b><span>5 minutes</span></article>
+        <article><b>Teach Card</b><span>10 minutes</span></article>
+        <article><b>Common Mistake</b><span>5 minutes</span></article>
+        <article><b>Class Check</b><span>10 minutes</span></article>
+        <article><b>Review Model Answer</b><span>5 minutes</span></article>
+        <article><b>Exit Ticket</b><span>5 minutes</span></article>
+      </div>
+    </section>
+
+    <section class="panel" id="activityTools">
+      <p class="kicker">Frequently Used Tools</p>
+      <h2>Quick teaching tasks.</h2>
+      <div class="tool-card-grid">
+        <a href="chapters/chapter10.html#teacher-companion">Logic Gate Class Check</a>
+        <a href="chapters/chapter7.html#teacher-companion">Trace Table Class Check</a>
+        <a href="chapters/chapter7.html#teacher-companion">Flowchart Discussion</a>
+        <a href="chapters/chapter3.html#teacher-companion">Storage Comparison</a>
+        <a href="chapters/chapter3.html#teacher-companion">CPU Fetch-Decode-Execute Cycle</a>
+        <a href="chapters/chapter8.html#teacher-companion">Arrays / Pseudocode Check</a>
+      </div>
+    </section>
+
+    <section class="panel" id="teacherNotes">
+      <p class="kicker">Teacher Notes</p>
+      <h2>Notes for the next lesson.</h2>
+      <textarea id="teacherNotes" class="teacher-notes" placeholder="Write reminders, misconceptions, homework follow-up, or what to reteach next lesson."></textarea>
+      <p class="note" id="notesStatus">Notes save automatically in this browser.</p>
+    </section>
+
+    <section class="panel secondary-info" id="chapterLibrary">
+      <div class="topbar">
+        <div>
+          <p class="kicker">Chapter Library</p>
+          <h2>Open any chapter.</h2>
+          <p id="progressText">Chapter links are kept here as a secondary library. Use them after choosing a classroom topic.</p>
+        </div>
+        <button class="btn secondary" id="resetProgressBtn" type="button">Reset Progress</button>
+      </div>
+      <div class="progress-wrap"><div id="progressBar" class="progress-bar"></div></div>
+      <section class="dashboard-grid" id="chapterGrid" aria-label="Chapter list"></section>
+    </section>
   </main>
-  <footer>Based on the Cambridge IGCSE and O Level Computer Science textbook chapter structure.</footer>
+  <footer>IGCSE Computer Science Teaching Companion.</footer>
   <script src="js/content.js"></script>
   <script src="js/progress.js"></script>
   <script type="module" src="js/site-animations.js"></script>

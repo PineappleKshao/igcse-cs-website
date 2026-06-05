@@ -1,6 +1,6 @@
-# IGCSE Computer Science Revision Studio
+# IGCSE Computer Science Teaching Companion
 
-A static website for Cambridge IGCSE Computer Science students. The site is organised around the textbook chapter structure and gives students a visual overview of each topic before they practise exam-style recall.
+A static classroom teaching companion for Cambridge IGCSE Computer Science teachers. The current product direction is a classroom interaction, display and explanation tool: teach one concept, check understanding, discuss a common mistake, reveal a short model answer, and finish with an exit check.
 
 ## Features
 
@@ -15,7 +15,13 @@ A static website for Cambridge IGCSE Computer Science students. The site is orga
   - Programming
   - Databases
   - Boolean Logic
-- Three-mode chapter pages: `Teach`, `Revise` and `Practise`.
+- Three-mode chapter pages: `Teach`, `Overview` and `Exit Check`.
+- Teacher-first homepage with action buttons for starting a classroom flow, running a class check and opening the chapter library.
+- Teacher Control Panel with today’s lesson selector, quick classroom actions, suggested lesson flow, frequently used tools and saved teacher notes.
+- Classroom Teaching Mode on every chapter, with projector-ready Teach Cards, Common Mistakes and Class Check cards.
+- Chapter 3 contains hand-written teaching cards; other chapters generate teaching cards from the existing chapter concepts and frequent questions.
+- Card-level answer reveal controls, designed for students to think first before seeing the model answer.
+- Projector Mode for cleaner classroom display and larger readable teaching cards.
 - Section-by-section teaching workspace on each chapter page, where the teacher clicks one textbook section at a time.
 - PowerPoint-folder resource index for local PPTX, PDF, DOCX, code, media and video shortcut files.
 - Slides panel inside each section, with PDF preview when available and one-click opening for PowerPoint files.
@@ -29,8 +35,7 @@ A static website for Cambridge IGCSE Computer Science students. The site is orga
 - Frequent-question section with expandable answers.
 - Three-question quick quiz for every chapter.
 - Browser localStorage progress tracking.
-- Teacher Classroom Hub for original compact worksheet and homework packs.
-- Exam-style answer patterns for each chapter, based on textbook/PPT concepts and 2018-2022 past-paper style.
+- Teacher Classroom Hub and worksheet packs are kept as secondary resources, not the main classroom flow.
 - Lesson Mode on every chapter page for projector-friendly classroom teaching.
 - Apple-inspired visual system across the home page, dashboard, Classroom Hub, chapter pages and Lesson Mode.
 - Anime.js-powered motion layer for page reveals, card stagger, click feedback and lesson transitions.
@@ -43,9 +48,9 @@ A static website for Cambridge IGCSE Computer Science students. The site is orga
 
 ```text
 igcse-cs-website/
-  index.html              # Landing page
-  dashboard.html          # Chapter dashboard and progress overview
-  classroom.html          # Teacher worksheet/homework pack hub
+  index.html              # Teacher Companion landing page
+  dashboard.html          # Teacher Control Panel
+    classroom.html          # Secondary worksheet/homework resource hub
   chapters/
     chapter1.html         # Chapter wrappers
     :
@@ -61,7 +66,7 @@ igcse-cs-website/
     lesson-slides.js      # Generated slide text extracted from local PPTX files
     classroom.js          # Classroom Hub pack filtering UI
     chapter.js            # Reusable chapter page, quiz, worked-example and lesson-mode renderer
-    progress.js           # Dashboard and progress renderer
+    progress.js           # Teacher Control Panel renderer and localStorage helpers
     site-animations.js    # Shared Anime.js motion layer
     vendor/
       anime.esm.min.js    # Local Anime.js v4 bundle
@@ -89,13 +94,44 @@ Then open:
 http://localhost:8000
 ```
 
-## Progress Tracking
+## Teacher Control Panel
 
-Progress is saved in the current browser using `localStorage`, so the site does not require accounts, passwords, or a backend database.
+The dashboard has been repositioned as a `Teacher Control Panel`, not a student progress tracker.
+
+It includes:
+
+- a chapter selector for today’s lesson
+- launch buttons for Classroom Flow, Section View, Answer Training and Exit Ticket
+- quick actions for Projector Mode, Exit Ticket, Class Check tools and teaching notes
+- a suggested 40-minute lesson flow
+- frequently used chapter tools
+- local teacher notes saved in `localStorage`
+- a smaller chapter library and progress section for reference
+
+## Progress And Local Storage
+
+Progress, teacher notes, projector-mode preference and answer-visibility preference are saved in the current browser using `localStorage`, so the site does not require accounts, passwords, APIs or a backend database.
+
+## Core Product Direction
+
+The current core direction is:
+
+```text
+Teacher opens website
+→ chooses today’s concept
+→ opens Classroom Teaching Mode
+→ explains with a Teach Card
+→ asks students to think first
+→ discusses a common mistake
+→ reveals a model answer
+→ finishes with an Exit Check
+```
+
+The site is not currently optimised as a worksheet library. Worksheet and classified-paper resources are still kept in the project, but they are intentionally demoted from the main navigation and classroom flow.
 
 ## Classroom Hub
 
-The Classroom Hub provides original worksheet and homework packs for every chapter. These are written as compact exam-style practice, not copied from the current worksheet/homework files.
+The Classroom Hub provides original worksheet and homework packs for every chapter. It is now treated as a secondary resource area for printing or preparation, not the primary classroom interface.
 
 The pack design follows this source logic:
 
@@ -104,21 +140,37 @@ The pack design follows this source logic:
 - Textbook and PowerPoint topics define the content coverage for each chapter.
 - Frequent answer patterns show students the phrasing and mark points they should learn.
 
-Use the Print button on the Classroom Hub or on a chapter page to produce a clean handout.
+Use the Classroom Hub only when you actually need a printed handout.
 
 ## Chapter Page Teaching Flow
 
 Each chapter page is designed to work as a live teaching page during class:
 
-- Use `Teach` mode as the main classroom control panel. Click one textbook section on the left, then use the right panel for `Teach`, `Slides`, `Practice` or `Video`.
+- Use Classroom Teaching Mode for Teach Cards, Common Mistakes and Class Check cards.
+- Use Projector Mode when displaying a Teach Card to the class.
+- Use Reveal Model Answer buttons at card level so students think first before seeing the model answer.
+- Use `Teach` mode as the main classroom control panel. Start with the Classroom Teaching Mode cards, then open section slides only when needed.
 - Use the `Teach` tab inside a section for lesson objective, teacher flow, board plan, must-know content, common exam trap, best answer phrase and key concept.
 - Use the `Slides` tab to open local PowerPoint files. If a matching PDF is available, the page can preview it directly in the browser.
-- Use the `Practice` tab for an exam-style task, local worksheet/homework files and classified-paper follow-up.
-- Use the `Video` tab to collect useful video links for that section. Saved links stay on the same browser through `localStorage`.
-- Use the interactive mindmap in `Revise` mode as a visual overview. Each block opens a focused card with a concept, exam trap, answer phrase, frequent question and practice prompt.
-- Use `Revise` mode for one-page summary, key terms, frequent questions and quiz.
-- Use `Practise` mode for worksheet/homework packs, classified papers and quiz.
-- Use the answer toggle to hide or reveal model answers during class.
+- Treat the older `Practice` and `Video` section tabs as optional resource areas, not the primary classroom flow.
+- Use the interactive mindmap in `Overview` mode as a visual overview. Each block opens a focused card with a concept, exam trap, answer phrase, frequent question and practice prompt.
+- Use `Overview` mode for one-page summary, key terms, frequent questions and quiz.
+- Use `Exit Check` mode for the final short quiz/check.
+- Use the answer toggle only as a backup; the preferred classroom pattern is to reveal answers one card at a time.
+
+## Classroom Teaching Mode
+
+Every chapter now has a Classroom Teaching Mode.
+
+Chapter 3 Hardware has hand-written teaching content:
+
+- 7 Teach Cards: RAM, ROM, CPU, HDD, SSD, Input Devices and Output Devices
+- 5 Common Mistakes: Feature vs Advantage, RAM vs ROM, HDD vs SSD, Input vs Output, Primary vs Secondary Storage
+- 4 Exam Answer Training tasks with weak answers, problems, better answers, mark points and student tasks
+- hidden answers by default
+- card-by-card navigation for projector use
+
+Other chapters use generated classroom cards based on their existing concepts, diagrams, frequent questions and exam traps. These are good enough for classroom testing, then can be rewritten by hand after real lessons show which topics need better phrasing.
 
 ## PowerPoint And Teaching Resources
 
@@ -216,6 +268,9 @@ Each chapter object contains:
 - `summary`
 - `map`
 - `concepts`
+- `teachCards` for hand-written classroom-ready concept cards; if omitted, cards are generated from concepts and frequent questions
+- `commonMistakes` for hand-written weak-answer correction; if omitted, cards are generated from chapter traps
+- `examAnswerTraining` for hand-written mark-point answer practice; if omitted, cards are generated from frequent questions
 - `diagram`
 - `exam`
 - `frequent`
@@ -247,4 +302,4 @@ If you prefer not to use a redirect, move the contents of `igcse-cs-website/` to
 
 ## Source Basis
 
-The chapter order follows the Cambridge IGCSE and O Level Computer Science textbook structure used in class. The site content is paraphrased into revision notes, visual explanations, original worksheet/homework packs and exam-practice prompts for students.
+The chapter order follows the Cambridge IGCSE and O Level Computer Science textbook structure used in class. The site content is paraphrased into classroom teaching cards, visual explanations, common mistake prompts, exit checks and secondary worksheet resources.

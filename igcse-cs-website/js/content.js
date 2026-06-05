@@ -67,6 +67,142 @@ window.CHAPTERS = [
       ["Storage media","Magnetic, optical and solid-state storage differ in capacity, speed, durability and cost."],
       ["Network hardware","Routers, switches, NICs and wireless access points move data around local and wide networks."]
     ],
+    teachCards:[
+      {
+        concept:"RAM",
+        simpleExplanation:"RAM is temporary memory used to store data and instructions that are currently being used by the computer.",
+        teacherScript:"RAM is like your desk. When you are working, you put books, papers and tools on the desk because you need them now. When the power is turned off, the desk is cleared. This is why RAM is volatile.",
+        visualAnalogy:"RAM = desk space. More RAM = more working space for several programs at the same time.",
+        keyExamWords:["temporary memory","currently in use","volatile","data and instructions","faster access than secondary storage"],
+        quickCheck:"Why is RAM called volatile memory?",
+        quickCheckAnswer:"Because the data stored in RAM is lost when the power is turned off."
+      },
+      {
+        concept:"ROM",
+        simpleExplanation:"ROM is non-volatile memory that stores instructions needed when the computer starts up.",
+        teacherScript:"ROM is like a fixed instruction card kept inside the computer. Students can read the card when they start, but they do not rewrite it during normal use. The computer uses ROM to begin the boot process.",
+        visualAnalogy:"ROM = startup instruction card. The instructions stay there when power is off.",
+        keyExamWords:["non-volatile","startup instructions","boot process","not normally changed","firmware"],
+        quickCheck:"Why does a computer need ROM when it starts?",
+        quickCheckAnswer:"ROM stores the startup instructions needed to begin the boot process."
+      },
+      {
+        concept:"CPU",
+        simpleExplanation:"The CPU processes instructions by fetching, decoding and executing them.",
+        teacherScript:"The CPU is not just one magic box. The control unit organises the work, the ALU performs arithmetic and logic, and registers hold small pieces of data while the instruction is being processed.",
+        visualAnalogy:"CPU = classroom team. CU gives instructions, ALU does calculations, registers hold the current working values.",
+        keyExamWords:["fetch-decode-execute","ALU","control unit","registers","instructions"],
+        quickCheck:"Which CPU component performs arithmetic and logic operations?",
+        quickCheckAnswer:"The ALU performs arithmetic and logic operations."
+      },
+      {
+        concept:"Hard Disk Drive",
+        simpleExplanation:"A hard disk drive stores data magnetically on spinning disks using a moving read/write head.",
+        teacherScript:"A hard disk drive is like a spinning record player. The disk spins and the arm moves to the correct place to read or write data. Because it has moving parts, it can be slower and easier to damage than solid-state storage.",
+        visualAnalogy:"HDD = spinning plate and moving arm.",
+        keyExamWords:["magnetic storage","moving parts","read/write head","large capacity","non-volatile"],
+        quickCheck:"Give one feature of a hard disk drive.",
+        quickCheckAnswer:"It stores data magnetically on spinning disks using a moving read/write head."
+      },
+      {
+        concept:"Solid-state Storage",
+        simpleExplanation:"Solid-state storage stores data electronically and has no moving parts.",
+        teacherScript:"Think of SSD as many tiny electronic switches. Each switch can store a 0 or 1. Unlike a hard disk drive, there is no spinning disk and no moving read/write head.",
+        visualAnalogy:"SSD = many tiny switches. HDD = spinning plate and moving arm.",
+        keyExamWords:["electronic storage","no moving parts","non-volatile","faster read/write access","more durable"],
+        quickCheck:"Give one feature of solid-state storage.",
+        quickCheckAnswer:"It has no moving parts."
+      },
+      {
+        concept:"Input Devices",
+        simpleExplanation:"An input device sends data into a computer system.",
+        teacherScript:"Ask students to follow the direction of data. If data goes from the real world into the computer, the device is input. A scanner captures an image into the system. A keyboard sends typed characters into the system.",
+        visualAnalogy:"Input = outside world to computer.",
+        keyExamWords:["data into the system","sensor","keyboard","scanner","captures data"],
+        quickCheck:"Why is a scanner an input device?",
+        quickCheckAnswer:"Because it captures data from a document or image and sends it into the computer."
+      },
+      {
+        concept:"Output Devices",
+        simpleExplanation:"An output device receives data from the computer and presents information to the user or environment.",
+        teacherScript:"Output is the computer speaking back. A monitor shows visual information, speakers produce sound, and a printer produces a physical copy.",
+        visualAnalogy:"Output = computer to user or environment.",
+        keyExamWords:["data out of the system","monitor","printer","speaker","presents information"],
+        quickCheck:"Why is a speaker an output device?",
+        quickCheckAnswer:"Because it receives data from the computer and produces sound for the user."
+      }
+    ],
+    commonMistakes:[
+      {
+        title:"Feature vs Advantage",
+        mistake:"Feature of SSD: it is easy to carry.",
+        whyWrong:"This is an advantage, not a feature. The question asks what the storage is or how it works.",
+        correctThinking:"Feature = what it is or how it works. Advantage = why the feature is useful.",
+        betterAnswer:"Feature: solid-state storage has no moving parts. Advantage: it is more durable because there are no moving parts that can be damaged easily."
+      },
+      {
+        title:"RAM vs ROM",
+        mistake:"RAM saves everything forever.",
+        whyWrong:"RAM is volatile. Its contents are lost when the power is turned off.",
+        correctThinking:"RAM is temporary working memory. ROM stores startup instructions and is non-volatile.",
+        betterAnswer:"RAM stores data and instructions currently in use. RAM is volatile, so its contents are lost when the power is turned off."
+      },
+      {
+        title:"HDD vs SSD",
+        mistake:"SSD is good and fast.",
+        whyWrong:"This answer is too vague. Good is not a technical feature, and fast needs more detail.",
+        correctThinking:"Use precise technical properties, then explain why they matter.",
+        betterAnswer:"Solid-state storage has no moving parts and stores data electronically using circuits. This gives faster read/write access and makes it more durable than magnetic storage."
+      },
+      {
+        title:"Input vs Output",
+        mistake:"A touchscreen is output because students can see it.",
+        whyWrong:"A touchscreen can be both input and output. Touch is input; the display is output.",
+        correctThinking:"Follow the direction of data between the user and the computer.",
+        betterAnswer:"A touchscreen is an input device when it detects touch from the user. It is also an output device when it displays information."
+      },
+      {
+        title:"Primary vs Secondary Storage",
+        mistake:"Secondary storage is the same as RAM because both store data.",
+        whyWrong:"RAM is primary memory used while programs run. Secondary storage keeps data long term.",
+        correctThinking:"Memory is active working space. Storage keeps files and programs when power is off.",
+        betterAnswer:"RAM is volatile primary memory used for data currently in use. Secondary storage is non-volatile and stores data permanently until it is deleted."
+      }
+    ],
+    examAnswerTraining:[
+      {
+        question:"Give two features of solid-state storage.",
+        weakAnswer:"It is fast and useful.",
+        problem:"Useful is too vague. Fast may be an advantage, but the question asks for features.",
+        betterAnswer:"Solid-state storage has no moving parts. It stores data electronically using circuits.",
+        markPoints:["no moving parts","electronic storage","non-volatile storage","uses memory chips or circuits"],
+        studentTask:"Write one feature and one advantage of solid-state storage."
+      },
+      {
+        question:"Explain one difference between RAM and ROM.",
+        weakAnswer:"RAM is bigger and ROM is smaller.",
+        problem:"The answer does not use the key exam difference: volatile vs non-volatile, or temporary vs startup instructions.",
+        betterAnswer:"RAM is volatile memory used to store data and instructions currently in use. ROM is non-volatile memory that stores startup instructions.",
+        markPoints:["RAM is volatile","ROM is non-volatile","RAM stores current data/instructions","ROM stores startup instructions"],
+        studentTask:"Write a two-mark comparison using the words volatile and non-volatile."
+      },
+      {
+        question:"A student needs portable storage for school files. Give one advantage of an SSD compared with an HDD.",
+        weakAnswer:"SSD is better.",
+        problem:"Better is not a reason. The answer must link a technical feature to the scenario.",
+        betterAnswer:"An SSD has no moving parts, so it is more durable if the portable device is carried around or knocked.",
+        markPoints:["no moving parts","more durable","less likely to be damaged","linked to portability or being carried"],
+        studentTask:"Rewrite the answer using because and the scenario."
+      },
+      {
+        question:"Identify one suitable input device for entering printed text into a computer and justify your choice.",
+        weakAnswer:"Keyboard, because it has letters.",
+        problem:"The question says printed text. A keyboard would require retyping; a scanner with OCR is more suitable.",
+        betterAnswer:"A scanner with OCR is suitable because it can capture the printed page and convert the text into editable digital text.",
+        markPoints:["scanner","OCR","captures printed document","converts to editable text"],
+        studentTask:"Choose the device and write one reason linked to printed text."
+      }
+    ],
     diagram:{title:"Fetch-Decode-Execute",steps:["PC holds address","Fetch into MDR","Decode in CU","Execute using ALU/registers","Update PC"]},
     exam:["Name CPU registers accurately and explain their role.","Choose input/output devices for a scenario with reasons.","Compare storage types using speed, capacity, portability and reliability."],
     frequent:[
