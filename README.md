@@ -131,7 +131,15 @@ Chapter 1 → Chapter 10 → Chapter 3 → Chapter 2 → Chapter 4
 
 This gives students a foundation in data representation, Boolean logic, hardware, data transmission and software before the remaining chapters are taught in Years 2 and 3.
 
-On `year-plan.html`, each week can be clicked to open a planning popup. The teacher can change the status to `Not started`, `In progress` or `Finished`, add a start date, adjust the lesson count and write teaching notes. The page also includes chapter/status filters, milestone cards, progress tracking and JSON export.
+On `year-plan.html`, each week can be clicked to open a planning popup. The teacher can change the status to `Not started`, `In progress` or `Finished`, add a start date, adjust the lesson count and write teaching notes. The page also includes chapter/status filters, milestone cards, progress tracking and Excel export.
+
+The `Export Excel` button downloads:
+
+```text
+igcse-cs-year1-teaching-plan.xls
+```
+
+The exported sheet includes week number, chapter, section, topic, status, start date, lesson count, objectives, lesson flow, assessment, resources and teacher notes.
 
 The timeline is saved in the current browser using:
 

@@ -205,17 +205,70 @@
   }
 
   function exportPlan(){
-    const output = {
-      exportedAt: new Date().toISOString(),
-      meta: plan.meta,
-      state,
-      weeks: plan.weeks
-    };
-    const blob = new Blob([JSON.stringify(output, null, 2)], { type:"application/json" });
+    const headers = [
+      "Week",
+      "Chapter",
+      "Chapter title",
+      "Section",
+      "Topic",
+      "Status",
+      "Start date",
+      "Lessons",
+      "Objectives",
+      "Lesson flow",
+      "Assessment",
+      "Resources",
+      "Teacher notes"
+    ];
+    const rows = plan.weeks.map(item => {
+      const itemState = state[item.week];
+      return [
+        item.week,
+        item.chapter === "review" ? "Review" : `Chapter ${item.chapter}`,
+        item.chapterTitle,
+        item.section,
+        item.title,
+        labelStatus(itemState.status),
+        itemState.startDate,
+        itemState.lessons,
+        item.objectives.join("\n"),
+        item.lessonFlow.join("\n"),
+        item.assessment,
+        item.resources.join("\n"),
+        itemState.notes
+      ];
+    });
+    const generatedAt = new Date().toLocaleString();
+    const workbookHtml = `<!doctype html>
+      <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel">
+      <head>
+        <meta charset="UTF-8">
+        <!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>Year 1 Plan</x:Name><x:WorksheetOptions><x:FreezePanes/><x:FrozenNoSplit/><x:SplitHorizontal>5</x:SplitHorizontal><x:TopRowBottomPane>5</x:TopRowBottomPane><x:ActivePane>2</x:ActivePane></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]-->
+        <style>
+          body{font-family:Arial,sans-serif;}
+          table{border-collapse:collapse;}
+          th,td{border:1px solid #d9dde5;padding:8px 10px;vertical-align:top;mso-number-format:"\\@";}
+          th{background:#1d1d1f;color:#fff;font-weight:700;}
+          .meta{background:#f5f5f7;font-weight:700;}
+          .wrap{white-space:pre-wrap;}
+        </style>
+      </head>
+      <body>
+        <table>
+          <tr><td class="meta" colspan="${headers.length}">IGCSE Computer Science Year 1 Teaching Timeline</td></tr>
+          <tr><td class="meta" colspan="${headers.length}">${excelText(plan.meta.rationale)}</td></tr>
+          <tr><td class="meta" colspan="${headers.length}">Exported: ${excelText(generatedAt)}</td></tr>
+          <tr><td class="meta" colspan="${headers.length}">Default route: Chapter 1 → Chapter 10 → Chapter 3 → Chapter 2 → Chapter 4</td></tr>
+          <tr>${headers.map(header => `<th>${excelText(header)}</th>`).join("")}</tr>
+          ${rows.map(row => `<tr>${row.map(value => `<td class="wrap">${excelText(value)}</td>`).join("")}</tr>`).join("")}
+        </table>
+      </body>
+      </html>`;
+    const blob = new Blob([workbookHtml], { type:"application/vnd.ms-excel;charset=utf-8" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = "igcse-cs-year1-plan.json";
+    link.download = "igcse-cs-year1-teaching-plan.xls";
     document.body.append(link);
     link.click();
     link.remove();
@@ -248,5 +301,11 @@
       '"':"&quot;",
       "'":"&#039;"
     }[char]));
+  }
+
+  function excelText(value){
+    const text = String(value ?? "");
+    const safeText = /^[=+\-@]/.test(text.trim()) ? `'${text}` : text;
+    return escapeHtml(safeText);
   }
 })();
