@@ -16,6 +16,7 @@ A static classroom teaching companion for Cambridge IGCSE Computer Science teach
   - Databases
   - Boolean Logic
 - Three-mode chapter pages: `Teach`, `Overview` and `Exit Check`.
+- Editable Year 1 Teaching Timeline for a 3-lessons-per-week class starting from Chapter 1.
 - Teacher-first homepage with action buttons for starting a classroom flow, running a class check and opening the chapter library.
 - Teacher Control Panel with today’s lesson selector, quick classroom actions, suggested lesson flow, frequently used tools and saved teacher notes.
 - Classroom Teaching Mode on every chapter, with projector-ready Teach Cards, Common Mistakes and Class Check cards.
@@ -50,7 +51,8 @@ A static classroom teaching companion for Cambridge IGCSE Computer Science teach
 igcse-cs-website/
   index.html              # Teacher Companion landing page
   dashboard.html          # Teacher Control Panel
-    classroom.html          # Secondary worksheet/homework resource hub
+  year-plan.html          # Editable Year 1 teaching timeline and three-year route
+  classroom.html          # Secondary worksheet/homework resource hub
   chapters/
     chapter1.html         # Chapter wrappers
     :
@@ -59,6 +61,8 @@ igcse-cs-website/
     style.css             # Shared Apple-inspired visual system and site styling
   js/
     content.js            # All chapter content and quiz data
+    year-plan-data.js     # 36-week Year 1 timeline and three-year IGCSE route
+    year-plan.js          # Editable timeline UI, status filters and localStorage saving
     practice-packs.js     # Original worksheet/homework packs and answer points
     textbook-guide.js     # Paraphrased textbook-aligned teaching flow for each chapter
     classified-papers.js  # Generated local classified-paper index
@@ -108,9 +112,36 @@ It includes:
 - local teacher notes saved in `localStorage`
 - a smaller chapter library and progress section for reference
 
+## Year 1 Teaching Timeline
+
+The Year Plan page is the planning layer before opening daily lesson pages.
+
+It assumes:
+
+- next semester starts from Chapter 1
+- one class has 3 Computer Science lessons per week
+- Year 1 has 36 teaching weeks, giving 108 planned lessons
+- the three-year IGCSE path starts with foundations, then moves into systems, problem solving and exam readiness
+
+The default Year 1 order is:
+
+```text
+Chapter 1 → Chapter 10 → Chapter 3 → Chapter 2 → Chapter 4
+```
+
+This gives students a foundation in data representation, Boolean logic, hardware, data transmission and software before the remaining chapters are taught in Years 2 and 3.
+
+On `year-plan.html`, each week can be clicked to open a planning popup. The teacher can change the status to `Not started`, `In progress` or `Finished`, add a start date, adjust the lesson count and write teaching notes. The page also includes chapter/status filters, milestone cards, progress tracking and JSON export.
+
+The timeline is saved in the current browser using:
+
+```text
+localStorage key: igcse_year1_timeline_state_v1
+```
+
 ## Progress And Local Storage
 
-Progress, teacher notes, projector-mode preference and answer-visibility preference are saved in the current browser using `localStorage`, so the site does not require accounts, passwords, APIs or a backend database.
+Progress, teacher notes, year-plan edits, projector-mode preference and answer-visibility preference are saved in the current browser using `localStorage`, so the site does not require accounts, passwords, APIs or a backend database.
 
 ## Core Product Direction
 
@@ -118,6 +149,7 @@ The current core direction is:
 
 ```text
 Teacher opens website
+→ checks the Year Plan
 → chooses today’s concept
 → opens Classroom Teaching Mode
 → explains with a Teach Card

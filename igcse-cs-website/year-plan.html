@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Year Plan · IGCSE CS Teaching Companion</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="planner-body">
+  <nav class="apple-nav planner-nav" aria-label="Main navigation">
+    <a href="index.html" class="brand-mark">IGCSE CS Teaching Companion</a>
+    <div>
+      <a href="index.html">Home</a>
+      <a href="dashboard.html">Teacher Panel</a>
+      <a href="year-plan.html">Year Plan</a>
+      <a href="dashboard.html#chapterLibrary">Chapter Library</a>
+    </div>
+  </nav>
+
+  <main class="year-plan-shell">
+    <section class="year-plan-hero">
+      <div>
+        <p class="apple-eyebrow">3 lessons per week · Year 1 starts from Chapter 1</p>
+        <h1>IGCSE CS Year 1 Teaching Timeline</h1>
+        <p id="plannerRationale">A live teaching process for the first year of a three-year IGCSE Computer Science path.</p>
+      </div>
+      <aside class="planner-scoreboard">
+        <span>Progress</span>
+        <strong id="plannerProgressText">0%</strong>
+        <div class="planner-progress-track"><i id="plannerProgressBar"></i></div>
+        <small id="plannerLessonCount">0 / 108 lessons finished</small>
+      </aside>
+    </section>
+
+    <section class="planner-controls" aria-label="Plan controls">
+      <label>Filter
+        <select id="plannerFilter">
+          <option value="all">All steps</option>
+          <option value="not start">Not started</option>
+          <option value="in progress">In progress</option>
+          <option value="finished">Finished</option>
+        </select>
+      </label>
+      <label>Chapter
+        <select id="plannerChapterFilter">
+          <option value="all">All chapters</option>
+        </select>
+      </label>
+      <button class="btn secondary" id="plannerResetBtn" type="button">Reset Plan</button>
+      <button class="btn" id="plannerExportBtn" type="button">Export JSON</button>
+    </section>
+
+    <section class="three-year-strip" id="threeYearPath" aria-label="Three-year path"></section>
+
+    <section class="planner-layout">
+      <aside class="planner-sidebar">
+        <section class="planner-card">
+          <p class="kicker">Year 1 Route</p>
+          <h2>1 → 10 → 3 → 2 → 4</h2>
+          <p>Foundation first: representation, logic, hardware, transmission and software.</p>
+        </section>
+        <section class="planner-card">
+          <p class="kicker">Milestones</p>
+          <div id="plannerMilestones" class="milestone-list"></div>
+        </section>
+      </aside>
+
+      <section class="timeline-board" id="timelineBoard" aria-label="Teaching timeline"></section>
+    </section>
+  </main>
+
+  <dialog class="plan-dialog" id="planDialog">
+    <form method="dialog" id="planForm">
+      <div class="plan-dialog-head">
+        <div>
+          <p class="kicker" id="dialogKicker">Week</p>
+          <h2 id="dialogTitle">Plan item</h2>
+        </div>
+        <button class="icon-btn" value="cancel" aria-label="Close" type="submit">×</button>
+      </div>
+      <input type="hidden" id="dialogWeek">
+      <div class="dialog-grid">
+        <label>Status
+          <select id="dialogStatus">
+            <option value="not start">Not started</option>
+            <option value="in progress">In progress</option>
+            <option value="finished">Finished</option>
+          </select>
+        </label>
+        <label>Start date
+          <input id="dialogStartDate" type="date">
+        </label>
+        <label>Lessons
+          <input id="dialogLessons" type="number" min="1" max="12">
+        </label>
+      </div>
+      <label>Teacher notes
+        <textarea id="dialogNotes" rows="5" placeholder="What to change, reteach, skip, or assess?"></textarea>
+      </label>
+      <section class="dialog-detail" id="dialogDetail"></section>
+      <div class="dialog-actions">
+        <button class="btn secondary" value="cancel" type="submit">Cancel</button>
+        <button class="btn" id="dialogSaveBtn" value="default" type="button">Save Changes</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="js/content.js"></script>
+  <script src="js/year-plan-data.js"></script>
+  <script src="js/year-plan.js"></script>
+</body>
+</html>
