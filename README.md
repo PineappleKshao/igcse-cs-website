@@ -136,10 +136,10 @@ On `year-plan.html`, each week can be clicked to open a planning popup. The teac
 The `Export Excel` button downloads:
 
 ```text
-igcse-cs-year1-teaching-plan.xlsx
+igcse-cs-year1-teaching-plan.xls
 ```
 
-The exported workbook is a real `.xlsx` file. It includes week number, chapter, section, topic, status, start date, lesson count, objectives, lesson flow, assessment, resources and teacher notes.
+The exported sheet includes week number, chapter, section, topic, status, start date, lesson count, objectives, lesson flow, assessment, resources and teacher notes.
 
 The timeline is saved in the current browser using:
 
